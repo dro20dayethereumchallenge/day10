@@ -1,0 +1,154 @@
+day 0 ! ( check day 0 video if you haven't) 
+
+
+sudo apt-get update
+sudo apt-get install -y ca-certificates curl gnupg
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+NODE_MAJOR=22
+echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+sudo apt-get update
+sudo apt-get install nodejs -y
+npm install web3
+npm install --save-dev @nomiclabs/hardhat-ethers ethers @nomiclabs/hardhat-waffle ethereum-waffle chai
+npm i @openzeppelin/contracts@4.5.0   
+
+#under the /home/ubuntu  directory...
+
+mkdir todo
+cd todo
+npx hardhat init
+cd contract
+vi todoList.sol
+
+
+
+
+pragma solidity ^0.8.9;
+
+
+contract TodoList {
+  uint public taskCount = 0;
+
+  struct Task {
+    uint id;
+    string content;
+    bool completed;
+  }
+
+  mapping(uint => Task) public tasks;
+
+  event TaskCreated(
+    uint id,
+    string content,
+    bool completed
+  );
+
+  event TaskCompleted(
+    uint id,
+    bool completed
+ );
+
+  constructor() public {  }
+
+  function createTask(string memory _content) public {
+    taskCount ++;
+    tasks[taskCount] = Task(taskCount, _content, false);
+    emit TaskCreated(taskCount, _content, false);
+  }
+
+  function toggleCompleted(uint _id) public {
+    Task memory _task = tasks[_id];
+    _task.completed = !_task.completed;
+    tasks[_id] = _task;
+    emit TaskCompleted(_id, _task.completed);
+  }
+
+    // Optional: Get task data (if not using public mapping)
+    function getTask(uint _id) public view returns (uint, string memory, bool) {
+        Task memory task = tasks[_id];
+        return (task.id, task.content, task.completed);
+    }
+}
+
+
+
+
+
+
+npx hardhat node --hostname localhost    # make sure to run as localhost vs the dns
+
+npx hardhat console --network localhost
+
+>await ethers.provider.getBalance("< my local address >")
+npx hardhat console --network localhost
+Welcome to Node.js v14.21.3.
+Type ".help" for more information.
+>  const signers = await ethers.getSigners();
+undefined
+> const contract =  await ethers.getContractFactory("TodoList")
+undefined
+>const bal = await ethers.provider.getBalance(signers[0])
+> const cd = await contract.deploy()
+> 
+> await cd.createTask("walk dog")
+
+> await cd.tasks(1)
+Result(3) [ 1n, 'take out trash', false ]
+> await cd.tasks(2)
+Result(3) [ 2n, 'walk dog', false ]
+> await cd.tasks(3)
+Result(3) [ 3n, 'walk dog', false ]
+> await cd.tasks(4)
+Result(3) [ 0n, '', false ]
+> await cd.taskCount()
+3n
+
+
+
+
+> await cd.tasks(3)
+Result(3) [ 3n, 'walk dog', true ]
+> await cd.tasks(2)
+Result(3) [ 2n, 'walk dog', false ]
+> await cd.tasks(1)
+Result(3) [ 1n, 'take out trash', true ]
+> await cd.toggleCompleted(1)
+
+
+
+> const events = await cd.queryFilter("TaskCreated")
+Uncaught SyntaxError: Identifier 'events' has already been declared
+> events.forEach(e => console.log(e.args))
+Result(3) [ 1n, 'take out trash', false ]
+Result(3) [ 2n, 'walk dog', false ]
+Result(3) [ 3n, 'walk dog', false ]
+undefined
+
+
+#### not using this unless you do a formal deployment...!!!!!!! ... see day 4 for this type of implementation. 
+
+terminal three: 
+
+ubuntu@ip-172-31-46-232:~/hello/src$ npx hardhat console --network localhost
+Welcome to Node.js v22.6.0.
+Type ".help" for more information.
+> const { ethers } = require("ethers");
+undefined
+>  let NewHelloAbi = require('./contractsData/Hello.json');
+undefined
+> let  HelloAddress = require('./contractsData/Hello-address.json');
+undefined
+> const provider = new ethers.JsonRpcProvider("http://ec2-52-89-102-52.us-west-2.compute.amazonaws.com:8545")
+undefined
+> const contract = new ethers.Contract(HelloAddress.address, NewHelloAbi.abi, provider);
+undefined
+>  const filter = contract.filters.myEventTest(null)
+undefined
+> contract.on(filter, (info) => {  console.log("info",info); });
+Promise {
+  <pending>,
+  [Symbol(async_id_symbol)]: 413,
+  [Symbol(trigger_async_id_symbol)]: 14
+}
+>
