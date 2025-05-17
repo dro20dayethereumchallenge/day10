@@ -124,6 +124,14 @@ Result(3) [ 1n, 'take out trash', false ]
 Result(3) [ 2n, 'walk dog', false ]
 Result(3) [ 3n, 'walk dog', false ]
 undefined
+>  const events9 = await cd2.queryFilter("TaskCompleted")
+undefined
+> events9.forEach(e => console.log(e.args))
+Result(2) [ 1n, true ]
+Result(2) [ 3n, true ]
+Result(2) [ 1n, false ]
+Result(2) [ 1n, true ]
+Result(2) [ 3n, false ]
 
 
 #### not using this unless you do a formal deployment...!!!!!!! ... see day 4 for this type of implementation. 
