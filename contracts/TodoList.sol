@@ -1,3 +1,4 @@
+
 pragma solidity ^0.8.9;
 
 
@@ -32,16 +33,10 @@ contract TodoList {
   }
 
   function toggleCompleted(uint _id) public {
-    Task memory _task = tasks[_id];
-    _task.completed = !_task.completed;
-    tasks[_id] = _task;
-    emit TaskCompleted(_id, _task.completed);
+    tasks[_id].completed = !tasks[_id].completed;
+    emit TaskCompleted(_id, tasks[_id].completed);
   }
 
-    // Optional: Get task data (if not using public mapping)
-    function getTask(uint _id) public view returns (uint, string memory, bool) {
-        Task memory task = tasks[_id];
-        return (task.id, task.content, task.completed);
-    }
-
 }
+
+
