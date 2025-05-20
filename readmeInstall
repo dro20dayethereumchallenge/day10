@@ -85,7 +85,8 @@ undefined
 > const cd = await contract.deploy()
 > 
 > await cd.createTask("walk dog")
-
+>  await cd.createTask("take out trash")
+>  await cd.createTask("pickp laundry")
 > await cd.tasks(1)
 Result(3) [ 1n, 'take out trash', false ]
 > await cd.tasks(2)
