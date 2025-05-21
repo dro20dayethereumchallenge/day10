@@ -134,6 +134,8 @@ ubuntu@ip-172-31-41-170:~/test$ npx hardhat test
 
 
 
+#### source code for assertion test: 
+#### <project dir?/test/TodoList.js
 
 
 const { expect } = require("chai");
