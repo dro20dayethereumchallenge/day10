@@ -87,37 +87,30 @@ undefined
 > await cd.createTask("walk dog")
 >  await cd.createTask("take out trash")
 >  await cd.createTask("pickp laundry")
+
 > await cd.tasks(1)
-Result(3) [ 1n, 'take out trash', false ]
+Result(3) [ 1n, 'walk dog', false ]
 > await cd.tasks(2)
-Result(3) [ 2n, 'walk dog', false ]
+Result(3) [ 2n, 'take out trash', false ]
 > await cd.tasks(3)
-Result(3) [ 3n, 'walk dog', false ]
-> await cd.tasks(4)
-Result(3) [ 0n, '', false ]
+Result(3) [ 3n, 'pickup laundry', false ]
 > await cd.taskCount()
 3n
-
-
-
-
-> await cd.tasks(3)
-Result(3) [ 3n, 'walk dog', true ]
-> await cd.tasks(2)
-Result(3) [ 2n, 'walk dog', false ]
-> await cd.tasks(1)
-Result(3) [ 1n, 'take out trash', true ]
-> await cd.toggleCompleted(1)
-
-
-
 > const events = await cd.queryFilter("TaskCreated")
-Uncaught SyntaxError: Identifier 'events' has already been declared
-> events.forEach(e => console.log(e.args))
-Result(3) [ 1n, 'take out trash', false ]
-Result(3) [ 2n, 'walk dog', false ]
-Result(3) [ 3n, 'walk dog', false ]
 undefined
+>  events.forEach(e => console.log(e.args))
+Result(3) [ 1n, 'walk dog', false ]
+Result(3) [ 2n, 'take out trash', false ]
+Result(3) [ 3n, 'pickup laundry', false ]
+> await cd.toggleCompleted(1)
+> await cd.toggleCompleted(3)
+
+
+
+
+
+
+
 >  const events9 = await cd2.queryFilter("TaskCompleted")
 undefined
 > events9.forEach(e => console.log(e.args))
